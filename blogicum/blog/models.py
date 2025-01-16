@@ -82,7 +82,11 @@ class Post(models.Model):
         verbose_name="Опубликовано",
         help_text="Снимите галочку, чтобы скрыть публикацию."
         )
-    created_at = models.DateTimeField(auto_now_add=False, blank=False, verbose_name="Добавлено")
+    created_at = models.DateTimeField(
+        auto_now_add=False,
+        blank=False,
+        verbose_name="Добавлено"
+        )
 
     class Meta:
         verbose_name = "публикация"

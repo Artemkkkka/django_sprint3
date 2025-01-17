@@ -16,10 +16,10 @@ class BaseModel(models.Model):
         auto_now_add=False,
         blank=False,
         verbose_name="Добавлено"
-        )   
+        )
 
     class Meta:
-        abstract = True 
+        abstract = True
 
 
 class Category(BaseModel):
@@ -34,14 +34,18 @@ class Category(BaseModel):
 
     class Meta:
         verbose_name = "категория"
-        verbose_name_plural = "Категории" 
+        verbose_name_plural = "Категории"
 
     def __str__(self):
         return self.title
 
 
-class Location(models.Model):
-    name = models.CharField(max_length=256, blank=False, verbose_name="Название места")
+class Location(BaseModel):
+    name = models.CharField(
+        max_length=256,
+        blank=False,
+        verbose_name="Название места"
+        )
 
     class Meta:
         verbose_name = "местоположение"
@@ -51,8 +55,12 @@ class Location(models.Model):
         return self.name
 
 
-class Post(models.Model):
-    title = models.CharField(max_length=256, blank=False, verbose_name="Заголовок")
+class Post(BaseModel):
+    title = models.CharField(
+        max_length=256,
+        blank=False,
+        verbose_name="Заголовок"
+        )
     text = models.TextField(blank=False, verbose_name="Текст")
     pub_date = models.DateTimeField(
         blank=False,
@@ -63,21 +71,21 @@ class Post(models.Model):
         User,
         on_delete=models.CASCADE,
         blank=False,
-        verbose_name="Автор публикации"           
+        verbose_name="Автор публикации"
     )
     location = models.ForeignKey(
         Location,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name="Местоположение"        
+        verbose_name="Местоположение"
     )
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
         null=True,
         blank=False,
-        verbose_name="Категория"          
+        verbose_name="Категория"
     )
 
     class Meta:
@@ -86,5 +94,3 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-
-

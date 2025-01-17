@@ -7,13 +7,13 @@ User = get_user_model()
 
 class BaseModel(models.Model):
     is_published = models.BooleanField(
-        null=True,
+        default=True,
         blank=False,
         verbose_name="Опубликовано",
         help_text="Снимите галочку, чтобы скрыть публикацию."
     )
     created_at = models.DateTimeField(
-        auto_now_add=False,
+        auto_now_add=True,
         blank=False,
         verbose_name="Добавлено"
     )
@@ -74,7 +74,7 @@ class Post(BaseModel):
         blank=False,
         verbose_name="Дата и время публикации",
         help_text=(
-            "Если установить дату и время в будущем — ;"
+            "Если установить дату и время в будущем — "
             "можно делать отложенные публикации."
         )
     )

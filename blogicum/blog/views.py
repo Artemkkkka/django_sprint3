@@ -23,9 +23,9 @@ def post_detail(request, id):
             or not post.is_published
             or not post.category.is_published
         ):
-            raise Http404("Публикация недоступна")
+            raise Http404()
     except Post.DoesNotExist:
-        raise Http404("Публикация не найдена")
+        raise Http404()
     template = "blog/detail.html"
     context = {
         "post": post,
@@ -33,11 +33,11 @@ def post_detail(request, id):
     return render(request, template, context)
 
 
-def category_posts(request, category_slug):
+def category_posts(request, slug):
     template = "blog/category.html"
     category = get_object_or_404(
         Category,
-        slug=category_slug,
+        slug=slug,
         is_published=True
     )
     posts_list = Post.objects.filter(

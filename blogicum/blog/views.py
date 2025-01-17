@@ -18,7 +18,11 @@ def index(request):
 def post_detail(request, id):
     try:
         post = Post.objects.get(pk=id)
-        if post.pub_date > now() or not post.is_published or not post.category.is_published:
+        if (
+            post.pub_date > now()
+            or not post.is_published
+            or not post.category.is_published
+        ):
             raise Http404("Публикация недоступна")
     except Post.DoesNotExist:
         raise Http404("Публикация не найдена")
@@ -31,7 +35,11 @@ def post_detail(request, id):
 
 def category_posts(request, category_slug):
     template = "blog/category.html"
-    category = get_object_or_404(Category, slug=category_slug, is_published=True)
+    category = get_object_or_404(
+        Category,
+        slug=category_slug,
+        is_published=True
+    )
     posts_list = Post.objects.filter(
         category=category,
         is_published=True,

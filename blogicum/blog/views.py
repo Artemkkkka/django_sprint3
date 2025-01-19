@@ -1,14 +1,15 @@
-from django.http import Http404
+from blog.models import Category, Post
 from django.shortcuts import get_object_or_404, render
-from blog.models import Post, Category
 from django.utils.timezone import now
+
+from .constants import INDEX_PAGE_POSTS_LIMIT
 
 
 def index(request):
     template = "blog/index.html"
     posts_list = Post.objects.filter(
         pub_date__lte=now(), is_published=True, category__is_published=True
-    ).order_by("-pub_date")[:5]
+    )[:INDEX_PAGE_POSTS_LIMIT]
     context = {
         "posts_list": posts_list,
     }
@@ -16,16 +17,13 @@ def index(request):
 
 
 def post_detail(request, id):
-    try:
-        post = Post.objects.get(pk=id)
-        if (
-            post.pub_date > now()
-            or not post.is_published
-            or not post.category.is_published
-        ):
-            raise Http404()
-    except Post.DoesNotExist:
-        raise Http404()
+    post = get_object_or_404(
+        Post,
+        pk=id,
+        is_published=True,
+        pub_date__lte=now(),
+        category__is_published=True,
+    )
     template = "blog/detail.html"
     context = {
         "post": post,
@@ -35,16 +33,10 @@ def post_detail(request, id):
 
 def category_posts(request, slug):
     template = "blog/category.html"
-    category = get_object_or_404(
-        Category,
-        slug=slug,
-        is_published=True
+    category = get_object_or_404(Category, slug=slug, is_published=True)
+    posts_list = category.posts.filter(
+        is_published=True, pub_date__lte=now()
     )
-    posts_list = Post.objects.filter(
-        category=category,
-        is_published=True,
-        pub_date__lte=now()
-    ).order_by('-pub_date')
     context = {
         "category": category,
         "posts_list": posts_list,

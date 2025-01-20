@@ -1,7 +1,7 @@
-from blog.models import Category, Post
 from django.shortcuts import get_object_or_404, render
 from django.utils.timezone import now
 
+from blog.models import Category, Post
 from .constants import INDEX_PAGE_POSTS_LIMIT
 
 
